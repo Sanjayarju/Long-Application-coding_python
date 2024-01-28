@@ -68,34 +68,54 @@ class booking(category):
             a = input("Please Confirm to pay(yes/no): ").lower()
             if a == 'yes':
                 print("Payment Success")
+                cart_item = {
+                'Place': selected_item.place,
+                'category': selected_item.name,
+                'No of persons' : no_of_persons,
+                'price': total_price,
+                'Date': date,
+                'pay' : pay
+            }
+                booking_details.insert(0,cart_item)
+                print("..............Your tickets booked Successfully.................\n")
             else:
                 print("Payment cancelled")
-        
-        cart_item = {
-            'Place': selected_item.place,
-            'category': selected_item.name,
-            'No of persons' : no_of_persons,
-            'price': total_price,
-            'Date': date,
-            'pay' : pay
-        }
-        booking_details.append(cart_item)
-        print("..............Your tickets booked Successfully.................\n")
 
 class booked(user_details):
 
     def show(self):
-        print("--------Your Booking history--------\n")
-        for book in booking_details:
-            print(f"Name of the Customer: {self.get_name().upper()}")
-            print(f"Place of the park: {book['Place']}")
-            print(f"Ticket Type: {book['category']}")
-            print(f"No of Tickets: {book['No of persons']}")
-            print(f"Total amount paid: {book['price']}")
-            print(f"Date of Booking slot: {book['Date']}")
-            print(f"Payment method: {book['pay']}")
-            
-              
+        if len(booking_details) != 0:
+
+            print("--------Your Booking history--------\n")
+            for book in booking_details:
+                print(f"Name of the Customer: {self.get_name().upper()}")
+                print(f"Place of the park: {book['Place']}")
+                print(f"Ticket Type: {book['category']}")
+                print(f"No of Tickets: {book['No of persons']}")
+                print(f"Total amount paid: {book['price']}")
+                print(f"Date of Booking slot: {book['Date']}")
+                print(f"Payment method: {book['pay']}\n")
+        else:
+            print(".......No Booking Available........")
+
+    def delete_history(self):
+
+        global booking_details
+        print("......Choose the options.....\n1. Delete last booking 2. Delete all history")
+        choose = int(input("Enter valid option: "))
+
+        if choose == 1:
+
+            if len(booking_details) != 0:
+                booking_details.pop(0)
+                print("Last History is deleted successfully......")
+            else:
+                print("No History........")
+        if choose == 2:
+
+            booking_details = []
+            print("All History deleted successfully......")
+                        
 if __name__ == "__main__":
 
     while True:
@@ -114,7 +134,8 @@ if __name__ == "__main__":
                 print("1. Category")
                 print("2. Book your ticket")
                 print("3. Booking History")
-                print("4. Logout")
+                print("4. Delete History")
+                print("5. Logout")
 
                 choice = int(input("Enter your choice: "))
                 if choice == 1:
@@ -171,6 +192,9 @@ if __name__ == "__main__":
                     app.show()
 
                 if choice == 4:
+                    app.delete_history()
+
+                if choice == 5:
                     print("***************Thank you using our service***************")
                     print(".........Logout Successfully........\n")
                     flag = False
